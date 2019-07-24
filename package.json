@@ -1,0 +1,25 @@
+{
+  "name": "hines-playbook-archiver",
+  "version": "1.0.0",
+  "description": "CLI Applicaion used to archive Hines Playbook content for distribution",
+  "main": "Hines_Playbook_Archiver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hinezonia/Hines-Playbook-Archiver.git"
+  },
+  "keywords": [
+    "Playbook",
+    "Archiver",
+    "Hinezonia",
+    "Hines"
+  ],
+  "author": "Mario Rodriguez (mrdramz/mrodriguez2)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hinezonia/Hines-Playbook-Archiver/issues"
+  },
+  "homepage": "https://github.com/hinezonia/Hines-Playbook-Archiver#readme"
+}
