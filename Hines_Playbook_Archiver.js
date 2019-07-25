@@ -46,10 +46,17 @@ const rootSite = 'https://w.amazon.com';
   await page.waitForSelector(linksSelector, {timeout: 0 });//a bit of a delay to have our content loaded
   const links = await page.$$eval(linksSelector, anchors => { return anchors.map(anchor => anchor.getAttribute('href')).slice(0, 5) }); //slice is for testing, remove once script is runing or modify to include all available links
   log("");
-  log(chalk.cyan('PAGES TO SAVE:'));
+  log(chalk.bold.inverse.cyan('PAGES TO SAVE:'));
   log("");
   log(links);
   log("");
+
+  fs.writeFile("Image URLs.txt", links, err => {
+    if (err) throw err;
+
+    console.log("File saved");
+
+  });
 
   await browser.close()
 
@@ -65,7 +72,7 @@ const rootSite = 'https://w.amazon.com';
 
     let site = rootSite + links[i];
     
-    log(chalk.bold.yellow(`GOING TO: ${site}`));
+    log(chalk.bold.inverse.yellow(`GOING TO: ${site}`));
     log("");
 
     await page.goto(rootSite + links[i]);
@@ -75,7 +82,7 @@ const rootSite = 'https://w.amazon.com';
     log("");
 
     const htmlContent = await page.evaluate(() => document.querySelector('div.xcontent').innerHTML);
-    const htmlContWithRelLinks = htmlContent.replace(/https:\/\/w\.amazon\.com\/bin\/view\/GREF\/Playbook\/?/g, "/");
+    let htmlContWithRelLinks = htmlContent.replace(/https:\/\/w\.amazon\.com\/bin\/view\/GREF\/Playbook\/?/g, "/");
 
     // console.log("HTML content: " + htmlContent);
     // console.log(htmlContWithRelLinks);
@@ -90,26 +97,30 @@ const rootSite = 'https://w.amazon.com';
 
     for(let i = 0; i < imageLinks.length; i++) {
       let imageName;
+      let tempContent;
+
       imageURISplit = imageLinks[i].split("/");
-      log(imageURISplit);
+      // log(imageURISplit);
       log("");
       
       imageName = imageURISplit[imageURISplit.length - 1];
-      log(imageName);
+      // log(imageName);
       log("");
 
-      // downloadImage(imageLinks[i], imageName, function() {
-      //   log("File Downloaded");
-      // })
-    }
-    
-    // fs.writeFile(pageTitle + ".html", htmlContWithRelLinks, (err) => {
-    //   if (err) throw err;
-    // });
+      tempContent = htmlContWithRelLinks.replace(imageLinks[i], "images/" + imageName);
+      htmlContWithRelLinks = tempContent;
 
-    await browser.close();
-
+  //     // downloadImage(imageLinks[i], imageName, function() {
+  //     //   log("File Downloaded");
+  //     // })
   }
+    
+  fs.writeFile(pageTitle + ".html", htmlContWithRelLinks, (err) => {
+    if (err) throw err;
+  });
+
+  await browser.close();
+
+}
 
 })();
-
